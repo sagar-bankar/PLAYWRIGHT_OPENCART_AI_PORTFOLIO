@@ -1,1 +1,680 @@
-fghff
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PLAYWRIGHT_OPENCART_AI_PORTFOLIO | Hybrid Test Automation Framework</title>
+    <style>
+      :root {
+        --brand: #005792;
+        --brand-dark: #00406b;
+        --ink: #333;
+        --muted: #5c6b7a;
+        --line: #e2e8ee;
+        --bg: #f4f6f8;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Segoe UI", Arial, sans-serif;
+        line-height: 1.65;
+      }
+      .container {
+        max-width: 960px;
+        margin: auto;
+        padding: 30px 26px 54px;
+        background: #fff;
+        box-shadow: 0 2px 18px rgba(0, 0, 0, 0.06);
+      }
+      header.hero {
+        text-align: center;
+        border-bottom: 3px solid var(--brand);
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+      .badge {
+        display: inline-block;
+        background: #eaf2fa;
+        color: var(--brand);
+        border: 1px solid #c8ddf0;
+        border-radius: 999px;
+        padding: 4px 14px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+      }
+      h1 {
+        color: var(--brand);
+        font-size: 2rem;
+        margin: 18px 0 6px;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        hyphens: auto;
+      }
+      h2 {
+        color: var(--brand);
+        font-size: 1.3rem;
+        margin: 0 0 14px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--line);
+      }
+      h3 { color: var(--brand-dark); font-size: 1.02rem; margin: 20px 0 8px; }
+      .subtitle { color: var(--muted); margin: 0; }
+      .section { margin-bottom: 38px; }
+      .lead { font-size: 1.02rem; }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .stat {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 16px 14px;
+        text-align: center;
+        background: #fbfdff;
+      }
+      .stat .value {
+        display: block;
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: var(--brand);
+        line-height: 1.2;
+      }
+      .stat .label {
+        display: block;
+        font-size: 0.78rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 4px;
+      }
+
+      ul.clean { list-style: none; padding: 0; margin: 0; }
+      ul.clean li {
+        padding: 7px 0 7px 22px;
+        border-bottom: 1px dashed var(--line);
+        position: relative;
+      }
+      ul.clean li::before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 16px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--brand);
+      }
+      ul.clean li:last-child { border-bottom: none; }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 26px;
+      }
+
+      figure { margin: 0 0 24px; }
+      figure a { display: block; }
+      figure img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 5px;
+        background: #fff;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      }
+      figure.portrait { max-width: 560px; }
+      figcaption {
+        font-size: 0.84rem;
+        color: var(--muted);
+        text-align: center;
+        margin-top: 8px;
+      }
+
+      code {
+        background: #eef3f8;
+        border: 1px solid #dbe6ef;
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-family: "Cascadia Mono", Consolas, monospace;
+        font-size: 0.86em;
+      }
+
+      pre.tree, pre.cmd {
+        background: #fbfdff;
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--brand);
+        border-radius: 6px;
+        padding: 16px 18px;
+        margin: 18px 0 0;
+        overflow-x: auto;
+        font-family: "Cascadia Mono", Consolas, monospace;
+        font-size: 0.82rem;
+        line-height: 1.55;
+        color: #2f3d4a;
+        tab-size: 4;
+      }
+      pre.tree .cmt, pre.cmd .cmt { color: #7a8b99; }
+      pre.cmd { font-size: 0.84rem; }
+      pre.cmd .pr { color: var(--brand); font-weight: 600; }
+
+      .flow { display: grid; gap: 8px; margin-top: 10px; }
+      .flow .node {
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--brand);
+        border-radius: 6px;
+        background: #fbfdff;
+        padding: 10px 14px;
+        font-size: 0.92rem;
+      }
+      .flow .node strong { color: var(--brand-dark); }
+      .flow .arrow { text-align: center; color: var(--brand); line-height: 1; }
+
+      table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin-top: 10px; }
+      th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+      th { background: #f2f7fb; color: var(--brand-dark); font-weight: 600; }
+
+      .tag {
+        display: inline-block;
+        font-family: "Cascadia Mono", Consolas, monospace;
+        font-size: 0.76rem;
+        background: #eaf2fa;
+        color: var(--brand);
+        border: 1px solid #c8ddf0;
+        border-radius: 4px;
+        padding: 1px 7px;
+        margin: 2px 4px 2px 0;
+      }
+
+      a { color: var(--brand); }
+      a.button {
+        display: inline-block;
+        padding: 10px 20px;
+        background: var(--brand);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-top: 14px;
+        font-weight: 600;
+      }
+      a.button:hover { background: var(--brand-dark); }
+
+      .note {
+        background: #fbfdff;
+        border: 1px solid var(--line);
+        border-left: 4px solid #f0ad4e;
+        border-radius: 6px;
+        padding: 12px 16px;
+        font-size: 0.92rem;
+        color: #4a5763;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        margin-top: 44px;
+        padding-top: 20px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 768px) {
+        .container { padding: 22px 16px 40px; }
+        h1 { font-size: 1.35rem; }
+        h2 { font-size: 1.15rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="hero">
+        <span class="badge">Hybrid Automation &middot; Web &middot; API &middot; DB &middot; GenAI</span>
+        <h1>PLAYWRIGHT_OPENCART_AI_PORTFOLIO</h1>
+        <p class="subtitle">Playwright + TypeScript Hybrid Test Automation Framework</p>
+      </header>
+
+      <div class="section">
+        <h3>Project Name: <strong>PLAYWRIGHT_OPENCART_AI_PORTFOLIO</strong></h3>
+        <p class="lead">
+          A professional-grade hybrid test automation framework built with
+          <strong>Playwright</strong> and <strong>TypeScript</strong>, covering browser UI
+          flows, REST API contracts and database verification in one layered codebase. It
+          follows the Page Object Model, exposes typed fixtures, validates responses against
+          JSON schemas, and produces HTML, JUnit and Allure reports from a single run &mdash;
+          executed on both GitHub Actions and Jenkins.
+        </p>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="value">48</span>
+            <span class="label">Tests in CI run</span>
+          </div>
+          <div class="stat">
+            <span class="value">49</span>
+            <span class="label">Total specs</span>
+          </div>
+          <div class="stat">
+            <span class="value">8</span>
+            <span class="label">Page Objects</span>
+          </div>
+          <div class="stat">
+            <span class="value">26</span>
+            <span class="label">API Routes</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Tools &amp; Technologies</h2>
+        <div class="grid-2">
+          <ul class="clean">
+            <li><strong>Language:</strong> TypeScript (Node.js)</li>
+            <li><strong>Test Runner:</strong> Playwright Test v1.65</li>
+            <li><strong>Design Pattern:</strong> Page Object Model + custom fixtures</li>
+            <li><strong>API Layer:</strong> Playwright <code>request</code> fixture</li>
+            <li><strong>Schema Validation:</strong> AJV against JSON schemas</li>
+            <li><strong>Database:</strong> MySQL via <code>mysql2</code></li>
+          </ul>
+          <ul class="clean">
+            <li><strong>Reporting:</strong> Playwright HTML, JUnit XML, Allure, custom reporter</li>
+            <li><strong>Test Data:</strong> Faker, CSV parsing, Excel (<code>xlsx</code>)</li>
+            <li><strong>Config:</strong> <code>dotenv</code> environments</li>
+            <li><strong>Accessibility:</strong> <code>@axe-core/playwright</code></li>
+            <li><strong>Generative AI:</strong> GitHub Copilot, Playwright MCP, Claude Code, Codex, Command Code, OpenRouter, Caveman</li>
+            <li><strong>CI/CD:</strong> GitHub Actions &amp; Jenkins</li>
+            <li><strong>Containerisation:</strong> Docker &amp; Docker Compose</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Framework Structure</h2>
+        <figure class="portrait">
+          <a href="https://raw.githubusercontent.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_PORTFOLIO/main/images/framework-structure.png" target="_blank" rel="noopener">
+            <img src="https://raw.githubusercontent.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_PORTFOLIO/main/images/framework-structure.png" alt="Framework folder structure" />
+          </a>
+          <figcaption>
+            Folder tree: <code>api</code>, <code>fixtures</code>, <code>pages</code>,
+            <code>tests</code>, <code>testdata</code> and <code>utils</code>
+          </figcaption>
+        </figure>
+
+        <h3>Repository Wire Diagram</h3>
+        <p class="lead">
+          The complete file-level layout of the repository, so each layer can be traced to the
+          exact file it lives in.
+        </p>
+
+        <pre class="tree">PLAYWRIGHT_OPENCART_AI_V1/                           <span class="cmt"># repository root</span>
+├── .github/
+│   └── workflows/
+│       └── playwright.yml                           <span class="cmt"># CI: install, browsers, tests, artifacts</span>
+├── api/
+│   ├── endpoints/
+│   │   └── routes.ts                                <span class="cmt"># all 26 endpoint paths in one map</span>
+│   └── schemas/
+│       ├── cart_api_schema.json                     <span class="cmt"># AJV contract for cart responses</span>
+│       ├── product_api_schema.json                  <span class="cmt"># AJV contract for product responses</span>
+│       └── user_api_schema.json                     <span class="cmt"># AJV contract for user responses</span>
+├── fixtures/
+│   └── pageFixtures.ts                              <span class="cmt"># injects Page Objects + cleanup hooks</span>
+├── pages/
+│   ├── AccountPage.ts                               <span class="cmt"># account dashboard, logout</span>
+│   ├── AdminPage.ts                                 <span class="cmt"># admin login, customer lookup</span>
+│   ├── CartPage.ts                                  <span class="cmt"># cart rows, quantity, price, total</span>
+│   ├── HomePage.ts                                  <span class="cmt"># header, search box, navigation</span>
+│   ├── LoginPage.ts                                 <span class="cmt"># email and password login form</span>
+│   ├── ProductPage.ts                               <span class="cmt"># product detail, quantity, add to cart</span>
+│   ├── RegisterPage.ts                              <span class="cmt"># registration fields and submit</span>
+│   └── SearchResultsPage.ts                         <span class="cmt"># result list and product selection</span>
+├── tests/
+│   ├── api/
+│   │   ├── fakestore-api-support.ts                 <span class="cmt"># shared request helpers</span>
+│   │   ├── fakestore-auth.api.spec.ts               <span class="cmt"># token issue and 401 cases</span>
+│   │   ├── fakestore-carts.api.spec.ts              <span class="cmt"># cart CRUD by user</span>
+│   │   ├── fakestore-products.api.spec.ts           <span class="cmt"># list, single, categories</span>
+│   │   ├── fakestore-schemas.api.spec.ts            <span class="cmt"># response contracts via AJV</span>
+│   │   ├── fakestore-users.api.spec.ts              <span class="cmt"># user CRUD and validation</span>
+│   │   └── fakestore-workflows.api.spec.ts          <span class="cmt"># cross-entity create/patch/delete</span>
+│   ├── db/
+│   │   └── customer.registration.database.spec.ts   <span class="cmt"># asserts new row in oc_customer</span>
+│   └── web/
+│       ├── addToCart.spec.ts                        <span class="cmt"># add product, verify cart line</span>
+│       ├── endToEndShoppingFlow.spec.ts             <span class="cmt"># register to checkout journey</span>
+│       ├── invalidLogin.spec.ts                     <span class="cmt"># wrong credentials error</span>
+│       ├── loginDataDriven.spec.ts                  <span class="cmt"># rows read from CSV and Excel</span>
+│       ├── logout.spec.ts                           <span class="cmt"># session end, back to home</span>
+│       ├── productSearch.spec.ts                    <span class="cmt"># search term returns matches</span>
+│       ├── userRegistration.spec.ts                 <span class="cmt"># new account created</span>
+│       └── validLogin.spec.ts                       <span class="cmt"># happy-path login</span>
+├── testdata/
+│   ├── opencart_logindata.csv                       <span class="cmt"># login rows for CSV-driven test</span>
+│   ├── opencart_logindata.json                      <span class="cmt"># same rows as JSON</span>
+│   └── opencart_logindata.xlsx                      <span class="cmt"># same rows as Excel</span>
+├── utils/
+│   ├── CustomReporter.ts                            <span class="cmt"># builds custom dashboard report</span>
+│   ├── DataReader.ts                                <span class="cmt"># parses CSV and Excel into objects</span>
+│   ├── dataGenerator.ts                             <span class="cmt"># Faker maker for unique users</span>
+│   ├── dbClient.ts                                  <span class="cmt"># mysql2 connection and query</span>
+│   └── helper.ts                                    <span class="cmt"># dates, waits, shared helpers</span>
+├── .env.example                                     <span class="cmt"># template for URLs and DB credentials</span>
+├── docker-compose.yml                               <span class="cmt"># app and MySQL services</span>
+├── Dockerfile                                       <span class="cmt"># image for headless test runs</span>
+├── Jenkinsfile                                      <span class="cmt"># declarative pipeline, publishes reports</span>
+├── package.json                                     <span class="cmt"># deps and tag-filtered npm scripts</span>
+├── playwright.config.ts                             <span class="cmt"># projects, reporters, traces, retries</span>
+├── playwright_mcp_context.md                        <span class="cmt"># AI agent rules: structure, order, no hallucination</span>
+└── tsconfig.json                                    <span class="cmt"># TypeScript compiler options</span></pre>
+
+        <ul class="clean">
+          <li><strong>pages/</strong> &mdash; 8 Page Objects (Home, Login, Register, Account, Search results, Product, Cart, Admin)</li>
+          <li><strong>fixtures/</strong> &mdash; <code>pageFixtures.ts</code> injects page objects into every test with cleanup hooks</li>
+          <li><strong>tests/</strong> &mdash; <code>web/</code> (8 specs), <code>api/</code> (6 specs), <code>db/</code> (1 spec)</li>
+          <li><strong>api/</strong> &mdash; <code>endpoints/routes.ts</code> plus 3 JSON schemas (cart, product, user)</li>
+          <li><strong>testdata/</strong> &mdash; the same login data in CSV, JSON and Excel formats</li>
+          <li><strong>utils/</strong> &mdash; custom HTML reporter, CSV/Excel reader, Faker data generator, MySQL client</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Layered Architecture</h2>
+        <div class="flow">
+          <div class="node"><strong>Specs</strong> &mdash; <code>tests/web</code>, <code>tests/api</code>, <code>tests/db</code></div>
+          <div class="arrow">&#8595;</div>
+          <div class="node"><strong>Fixtures</strong> &mdash; <code>fixtures/pageFixtures.ts</code></div>
+          <div class="arrow">&#8595;</div>
+          <div class="node"><strong>Page Objects</strong> &mdash; locators and actions encapsulated per screen</div>
+          <div class="arrow">&#8595;</div>
+          <div class="node"><strong>API Layer</strong> &mdash; <code>api/endpoints/routes.ts</code> + JSON schema contracts</div>
+          <div class="arrow">&#8595;</div>
+          <div class="node"><strong>Data &amp; DB</strong> &mdash; <code>testdata/</code>, <code>utils/dbClient.ts</code></div>
+          <div class="arrow">&#8595;</div>
+          <div class="node"><strong>Reporting</strong> &mdash; HTML, JUnit XML, Allure, custom dashboard</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Test Coverage</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Layer</th>
+              <th>Area</th>
+              <th>Tags</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Web UI</td>
+              <td>Valid login, invalid login, logout, registration, product search, add to cart, end-to-end shopping flow</td>
+              <td><span class="tag">@web</span><span class="tag">@sanity</span><span class="tag">@regression</span></td>
+            </tr>
+            <tr>
+              <td>Web UI</td>
+              <td>Data-driven login &mdash; valid and invalid rows read from CSV / Excel</td>
+              <td><span class="tag">@datadriven</span></td>
+            </tr>
+            <tr>
+              <td>API</td>
+              <td>Authentication, users, products, carts and cross-entity CRUD workflows</td>
+              <td><span class="tag">@api</span></td>
+            </tr>
+            <tr>
+              <td>API</td>
+              <td>Response contract validation against JSON schemas using AJV</td>
+              <td><span class="tag">@api</span></td>
+            </tr>
+            <tr>
+              <td>Database</td>
+              <td>Customer registration verified across storefront, Admin portal and MySQL</td>
+              <td><span class="tag">@db</span><span class="tag">@end-to-end</span></td>
+            </tr>
+            <tr>
+              <td>E2E</td>
+              <td>Register &rarr; logout &rarr; login &rarr; search &rarr; add to cart &rarr; verify quantity, price and total</td>
+              <td><span class="tag">@end-to-end</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>Generative AI &amp; GitHub Copilot in Testing</h2>
+        <p class="lead">
+          Generative AI is used as an assisted-engineering layer across the test lifecycle, not
+          as an autopilot. The emphasis is on <strong>prompt engineering skill</strong> &mdash;
+          structuring context, intent, constraints and expected outcomes so the coding agent
+          produces reviewable output that fits this framework &mdash; combined with AI-agent
+          workflows that cover design, authoring, debugging and review.
+        </p>
+
+        <h3>AI Toolchain</h3>
+        <ul class="clean">
+          <li><strong>GitHub Copilot</strong> &mdash; inline completions, chat-driven refactoring and test scaffolding inside the editor.</li>
+          <li><strong>Playwright MCP</strong> &mdash; live browser and API analysis so locators and endpoints are verified against the real application, never invented.</li>
+          <li><strong>Claude Code, Codex, Command Code</strong> &mdash; agentic coding sessions for multi-file work: new Page Objects, API route + schema + spec triples, and DB specs.</li>
+          <li><strong>OpenRouter</strong> &mdash; single gateway for model access across those agents, so the same context file drives whichever model is in use.</li>
+          <li><strong>Caveman</strong> &mdash; used throughout development to cut token cost: <code>/caveman-commit</code> for one-line conventional commit messages, <code>/caveman-review</code> for terse per-line findings, and compressed Playwright failure output so long test logs cost less to read. Code, paths and error text stay verbatim.</li>
+          <li><strong>Shared context file</strong> &mdash; <code>playwright_mcp_context.md</code> acts as the single source of truth for every agent.</li>
+        </ul>
+
+        <div class="note">
+          <strong>Project evidence:</strong> <code>playwright_mcp_context.md</code> in the
+          repository defines how agents must analyse the app, order dependencies, reuse existing
+          components, verify selectors through live execution and avoid hallucinated locators,
+          endpoints and schemas. Different agents produce consistent output because they work
+          from the same contract.
+        </div>
+
+        <div class="note">
+          <strong>Where to verify Caveman:</strong> <code>/caveman-commit</code> leaves its trace
+          in the repository itself &mdash; the conventional one-line commit messages in the git
+          history are its output. <code>/caveman-review</code> and log compression act on agent
+          sessions instead, so they reduce cost rather than producing committed files.
+        </div>
+
+        <h3>Prompt Engineering Approach</h3>
+        <ul class="clean">
+          <li><strong>Context first:</strong> Supply the framework layout, Page Object conventions, fixture usage and locator strategy before requesting code.</li>
+          <li><strong>Intent and scope:</strong> State the single behaviour under test, the layer it belongs to (web, API, DB) and the file it should live in.</li>
+          <li><strong>Constraints:</strong> Specify TypeScript typing, tag conventions, accessible locators, assertion style and what must not be changed.</li>
+          <li><strong>Expected output:</strong> Define acceptance in terms of passing assertions and readable failures rather than "make it work".</li>
+          <li><strong>Iterate with feedback:</strong> Treat the first response as a draft &mdash; refine with the actual error, trace or review comment.</li>
+        </ul>
+
+        <h3>Copilot Workflows by Stage</h3>
+        <ul class="clean">
+          <li><strong>Test design:</strong> Turn requirements into positive, negative and boundary scenarios for the OpenCart UI and FakeStore API.</li>
+          <li><strong>Page Object authoring:</strong> Draft locators and action methods that follow the existing encapsulation and accessible-locator patterns.</li>
+          <li><strong>Test implementation:</strong> Generate spec scaffolding and fixtures-aware test bodies aligned with current project structure.</li>
+          <li><strong>API validation:</strong> Build request flows and JSON schema assertions for authentication, products and carts.</li>
+          <li><strong>Failure analysis:</strong> Interpret Playwright errors and traces, identify likely root causes and propose focused fixes.</li>
+          <li><strong>Test review:</strong> Check assertion strength, edge-case coverage and maintainability before execution.</li>
+          <li><strong>Documentation:</strong> Summarise framework decisions and setup steps for the repository README and this portfolio.</li>
+        </ul>
+
+        <div class="note">
+          <strong>Human review:</strong> Every Copilot suggestion is verified against requirements,
+          project patterns and actual test results. Assertions are never accepted on trust, and
+          the tester owns the final code, validation and root-cause decisions.
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Running the Suite</h2>
+        <p class="lead">
+          Suites are selected by Playwright tag through npm scripts, so the same commands work
+          locally and in CI.
+        </p>
+
+        <h3>Setup</h3>
+        <pre class="cmd"><span class="pr">$</span> npm install
+<span class="pr">$</span> npx playwright install
+<span class="pr">$</span> cp .env.example .env          <span class="cmt"># base URL, FakeStore endpoint, MySQL credentials</span></pre>
+
+        <h3>Scripts from package.json</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Runs</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>npm run test:web</code></td><td>All UI specs &mdash; <code>--grep @web</code></td></tr>
+            <tr><td><code>npm run test:api</code></td><td>All API specs &mdash; <code>--grep @api</code></td></tr>
+            <tr><td><code>npm run test:sanity</code></td><td>Smoke subset &mdash; <code>--grep @sanity</code></td></tr>
+            <tr><td><code>npm run test:regression</code></td><td>Full regression set &mdash; <code>--grep @regression</code></td></tr>
+            <tr><td><code>npm run test:e2e</code></td><td>End-to-end journeys &mdash; <code>--grep @e2e</code></td></tr>
+            <tr><td><code>npm run test:datadriven</code></td><td>CSV / Excel driven login &mdash; <code>--grep @datadriven</code></td></tr>
+            <tr><td><code>npm run test:master</code></td><td>Everything tagged <code>@master</code></td></tr>
+            <tr><td><code>npm run test:sanity:debug</code></td><td>Sanity subset in Playwright Inspector &mdash; <code>--debug</code></td></tr>
+            <tr><td><code>npm run test:master:headed</code></td><td>Headed sanity run &mdash; <code>--headed</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3>Direct Playwright usage</h3>
+        <pre class="cmd"><span class="pr">$</span> npx playwright test --grep @api --headed   <span class="cmt"># tag filter at runtime</span>
+<span class="pr">$</span> npx playwright test tests/web/validLogin.spec.ts
+<span class="pr">$</span> npx playwright test --grep-invert "@db"    <span class="cmt"># CI skips MySQL spec</span>
+<span class="pr">$</span> npx playwright show-report                <span class="cmt"># open last HTML report</span></pre>
+      </div>
+
+      <div class="section">
+        <h2>Project Reports</h2>
+
+        <figure>
+          <h3>Playwright HTML Report</h3>
+          <a href="https://raw.githubusercontent.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_PORTFOLIO/main/images/Playwright-HTML-Report.png" target="_blank" rel="noopener">
+            <img src="https://raw.githubusercontent.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_PORTFOLIO/main/images/Playwright-HTML-Report.png" alt="Playwright HTML report" />
+          </a>
+          <figcaption>Report path: <code>reports/index.html</code></figcaption>
+        </figure>
+
+        <figure>
+          <h3>Custom HTML Report</h3>
+          <a href="https://raw.githubusercontent.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_PORTFOLIO/main/images/custom-report.png" target="_blank" rel="noopener">
+            <img src="https://raw.githubusercontent.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_PORTFOLIO/main/images/custom-report.png" alt="Custom HTML dashboard report" />
+          </a>
+          <figcaption>
+            Custom dashboard built by <code>utils/CustomReporter.ts</code> &mdash;
+            <code>custom-report/report_*.html</code>
+          </figcaption>
+        </figure>
+
+        <figure>
+          <h3>Allure Report</h3>
+          <a href="https://raw.githubusercontent.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_PORTFOLIO/main/images/Allure-Report.png" target="_blank" rel="noopener">
+            <img src="https://raw.githubusercontent.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_PORTFOLIO/main/images/Allure-Report.png" alt="Allure report dashboard" />
+          </a>
+          <figcaption>Allure report &mdash; generated from <code>allure-results</code></figcaption>
+        </figure>
+      </div>
+
+      <div class="section">
+        <h2>CI/CD Integration</h2>
+
+        <figure>
+          <h3>Jenkins Pipeline Build</h3>
+          <a href="https://raw.githubusercontent.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_PORTFOLIO/main/images/jenkins-build.png" target="_blank" rel="noopener">
+            <img src="https://raw.githubusercontent.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_PORTFOLIO/main/images/jenkins-build.png" alt="Jenkins pipeline build output" />
+          </a>
+          <figcaption>
+            Jenkins declarative pipeline &mdash; checkout, install, browser setup, test run
+            and reporting
+          </figcaption>
+        </figure>
+
+        <div class="grid-2">
+          <div>
+            <h3>Jenkins</h3>
+            <ul class="clean">
+              <li>Declarative pipeline, parameters for suite, browser and mode</li>
+              <li>Publishes JUnit, Allure and two HTML reports</li>
+              <li>Archives reports, screenshots, videos and traces</li>
+              <li>Email notification with report links</li>
+            </ul>
+          </div>
+          <div>
+            <h3>GitHub Actions</h3>
+            <ul class="clean">
+              <li>Manual dispatch with the same three inputs</li>
+              <li>Runs on <code>windows-latest</code> with Node LTS</li>
+              <li>Uploads Playwright, custom and Allure reports</li>
+              <li>30-day artifact retention</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="note">
+          <strong>Environment note:</strong> the <code>@db</code> spec needs a MySQL instance
+          reachable at <code>DB_HOST:DB_PORT</code> with the <code>openshop</code> schema. CI
+          skips it with <code>--grep-invert '@db'</code>; it runs locally where the database
+          is available.
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Applications Under Test</h2>
+        <ul class="clean">
+          <li>
+            <strong>OpenCart storefront</strong> &mdash;
+            <a href="https://tutorialsninja.com/demo/" target="_blank" rel="noopener">tutorialsninja.com/demo</a>
+            &mdash; web UI and admin portal
+          </li>
+          <li>
+            <strong>FakeStore API</strong> &mdash;
+            <a href="https://fakestoreapi.com" target="_blank" rel="noopener">fakestoreapi.com</a>
+            &mdash; REST contracts and workflows
+          </li>
+          <li><strong>MySQL</strong> &mdash; <code>openshop</code> schema, <code>oc_customer</code> validation</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Project Links</h2>
+        <p>Source code, framework context and step-by-step setup guide:</p>
+        <a class="button" href="https://github.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_V1" target="_blank" rel="noopener">
+          View Repository on GitHub
+        </a>
+      </div>
+
+      <div class="section">
+        <h2>Contact</h2>
+        <ul class="clean">
+          <li>
+            <strong>Email:</strong>
+            <a href="mailto:sagar.bankar638@gmail.com">sagar.bankar638@gmail.com</a>
+          </li>
+          <li>
+            <strong>GitHub:</strong>
+            <a href="https://github.com/sagar-bankar" target="_blank" rel="noopener">github.com/sagar-bankar</a>
+          </li>
+          <li>
+            <strong>Framework source:</strong>
+            <a href="https://github.com/sagar-bankar/PLAYWRIGHT_OPENCART_AI_V1" target="_blank" rel="noopener">PLAYWRIGHT_OPENCART_AI_V1</a>
+          </li>
+        </ul>
+        <p class="lead">
+          Open to Software Test Engineer roles. If this work fits a role on your team, email is
+          the fastest way to reach me.
+        </p>
+      </div>
+
+      <footer>
+        <p>
+          Thank you for taking the time to explore this automation framework.<br />
+          I hope it gives a clear insight into my approach to professional test automation.
+        </p>
+        <p>Built by Sagar Bankar &middot; Software Test Engineer</p>
+      </footer>
+    </div>
+  </body>
+</html>
